@@ -1,2 +1,2 @@
 # globitek_week1
-Created a website for listing states, territories, and peope associated with it using Apache, PHP &amp; MySQL.
+Created a website for listing states, territories, and people associated with it using Apache, PHP &amp; MySQL.
