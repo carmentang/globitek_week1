@@ -2,11 +2,11 @@ ul {
   margin-left: 10px;
 }
 
-li {
+/*li {
   border: solid 0.5px black;
   margin: 20px;
   padding: 10px;
-}
+}*/
 
 span.state_name {
   color: blue;

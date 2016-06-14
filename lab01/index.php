@@ -1,13 +1,12 @@
 <?php
 $page_title = "Countries";
 $page_description = "List of Countries";
+include('private/functions.php');
 include('includes/header.php');
 ?>
 
 <?php
   require_once('private/initialize.php');
-
-  $db = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
 
     echo "<div>";
       echo "<h1>Home</h1>";

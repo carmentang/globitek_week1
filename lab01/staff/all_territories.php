@@ -8,8 +8,6 @@ include('../private/functions.php');
 <?php
   require_once('../private/initialize.php');
 
-  $db = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
-
   echo "<a href='menu.php'>";
   echo "Back to menu";
   echo "</a>";
@@ -18,19 +16,18 @@ include('../private/functions.php');
     echo "Territories";
   echo "</h1>";
 
-  $countries_result = get_results($db, "countries", true, true);
+  $countries_result = get_all_countries();
 
   while($country = mysqli_fetch_assoc($countries_result)) {
     echo "<h2>";
-      echo "<span class=\"state_name\"> ${country['name']} </span>";
+      echo "<span class=\"state_name\">" . h($country['name']) . "</span>";
     echo "</h2>";
 
     echo "<b>Name State_ID Salespeople_ID</b><br>";
-    $territories_result = get_results($db, "territories", true, true);
+    $territories_result = get_all_territories();
     while($territories = mysqli_fetch_assoc($territories_result)) {
       echo "<td><tr>";
-      echo "${territories['name']} ";
-      echo "${territories['state_id']} ${territories['salespeople_ids']} ";
+      echo h($territories['name']) . " " . h($territories['state_id']) . " " . h($territories['salespeople_ids']);
       echo "<a href='territory.php?id=${territories['id']}'}>View</a><br>";
       echo "</td></tr>";
     }

@@ -12,14 +12,14 @@ include('../private/functions.php');
 
   $id = $_GET["id"];
 
-  $territories_result = get_results($db, "territories", "id", $id);
+  $territories_result = get_territories_by_id($id);
 
   while ($territories = mysqli_fetch_assoc($territories_result)) {
-    $name = $territories['name'];
-    $state_id = $territories['state_id'];
-    $salespeople_ids = $territories['salespeople_ids'];
+    $name = h($territories['name']);
+    $state_id = h($territories['state_id']);
+    $salespeople_ids = h($territories['salespeople_ids']);
   }
-  
+
   echo "<a href='all_territories.php'>";
   echo "Back to all territories";
   echo "</a>";

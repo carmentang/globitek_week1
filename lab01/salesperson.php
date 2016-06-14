@@ -8,19 +8,30 @@ include('private/functions.php');
 <?php
   require_once('private/initialize.php');
 
-  $db = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
-
   echo "<div>";
 
+    echo "<a href='territories.php'>";
+    echo "Back to territories";
+    echo "</a><br>";
+
     echo "<a href='staff/all_salespeople.php'>";
-    echo "Back to salespeople";
+    echo "Back to all salespeople";
     echo "</a>";
 
-    $person_id = $_GET["person_id"];
-    $info = get_results($db, "salespeople", "id", $person_id);
+    $all_salespeople = get_all_salespeople();
+    $all_id = array();
 
-    $sql_territories = "SELECT * FROM territories ORDER BY name ASC";
-    $territories_result = mysqli_query($db, $sql_territories);
+    while ($sales = mysqli_fetch_assoc($all_salespeople)) {
+        array_push($all_id, $sales['id']);
+    }
+
+    $person_id = $_GET["person_id"];
+    if (!$person_id || !in_array($person_id, $all_id)) {
+      header("Location: territories.php");
+    }
+    $info = get_salesppl_by_id($person_id);
+
+    $territories_result = get_all_territories();
 
     while ($person = mysqli_fetch_assoc($info)) {
       echo "<h1>";
@@ -28,10 +39,9 @@ include('private/functions.php');
       echo "</h1>";
 
       if ($person['id'] == $person_id) {
-        echo "<span class=\"information\">";
-          echo "${person['first_name']} ${person['last_name']}<br>";
-          echo "${person['phone']}<br>";
-          echo "${person['email']}<br>";
+        echo "<span class=\"information\">" . h($person['first_name']) . " " . h($person['last_name']) . "<br>";
+          echo h($person['phone']) . "<br>";
+          echo h($person['email']) . "<br>";
         echo "</span><br>";
 
         echo "<h1>";
@@ -39,6 +49,7 @@ include('private/functions.php');
         echo "</h1>";
 
         $terr_result = get_results($db, "salespeople_territories", "salespeople_ids", $person_id);
+        $terr_result = get_salesterritories_by_salesppl_id($person_id);
         $places = array();
 
         while ($person = mysqli_fetch_assoc($terr_result)) {
@@ -46,15 +57,11 @@ include('private/functions.php');
         }
 
         $places_u = array_unique($places);
-
         while ($territories = mysqli_fetch_assoc($territories_result)) {
           if (in_array($territories['id'], $places_u)) {
-            echo "<span class=\"area\">";
-            echo "${territories['name']}";
-            echo "</span><br>";
+            echo "<li><span class=\"area\">" . h($territories['name']) . "</span></li>";
           }
         }
-
         mysqli_free_result($territories_result);
       }
     }

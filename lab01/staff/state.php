@@ -12,12 +12,12 @@ include('../private/functions.php');
 
   $id = $_GET["id"];
 
-  $states_result = get_results($db, "states", "id", $id);
+  $states_result = get_states_by_id($id);
 
   while ($states = mysqli_fetch_assoc($states_result)) {
-    $name = $states['name'];
-    $code = $states['code'];
-    $country_id = $states['country_id'];
+    $name = h($states['name']);
+    $code = h($states['code']);
+    $country_id = h($states['country_id']);
   }
 
   echo "<a href='all_states.php'>";
@@ -30,17 +30,16 @@ include('../private/functions.php');
 
   echo "Name: $name <br>";
   echo "Code: $code <br>";
-  echo "Country Code: $country_id <br>";
+  echo "Country Code: $country_id <br><br>";
 
-  $territories_result = get_results($db, "territories", "state_id", $id);
+  $territories_result = get_territories_by_state_id($id);
 
-  echo "<ul>";
   while($territories = mysqli_fetch_assoc($territories_result)) {
     echo "<li>";
     echo "<span class=\"territories_name\"><a href='territory.php?id=${territories['id']}'>${territories['name']}</span>";
     echo "</li>";
   }
-  echo "</ul>";
+
   mysqli_free_result($territories_result);
 
   mysqli_close($db);
